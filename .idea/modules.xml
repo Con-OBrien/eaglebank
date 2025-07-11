@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/eagle.iml" filepath="$PROJECT_DIR$/eagle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bank-api.iml" filepath="$PROJECT_DIR$/bank-api.iml" />
     </modules>
   </component>
 </project>
