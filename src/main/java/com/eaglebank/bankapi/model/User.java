@@ -3,6 +3,7 @@ package com.eaglebank.bankapi.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import java.util.Set;
 import java.util.HashSet;
@@ -53,14 +53,18 @@ public class User implements UserDetails {
     @Id
     private UUID id;
 
+    @NotBlank(message = "Name is required")
+    @NotNull
     @Column(nullable = false)
     private String name;
 
+    @NotBlank(message = "Email is required")
     @NotNull
     @Email
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Password is required")
     @NotNull
     private String password;
 
@@ -78,6 +82,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    @NotNull(message = "At least one role must be specified")
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> roles = new HashSet<>();
 
@@ -96,30 +101,33 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return this.email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     public String getPassword() {
         return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

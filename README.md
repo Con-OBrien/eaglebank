@@ -66,11 +66,11 @@ This project implements a RESTful banking API with users, accounts, and transact
 
 ### Create & View
 
-- [ ] `POST /v1/users` - Create user
-- [ ] `POST /v1/users` - Returns `400` for missing required fields
-- [ ] `GET /v1/users/{userId}` - Get **own** user details
-- [ ] `GET /v1/users/{userId}` - Returns `403` for other users’ data
-- [ ] `GET /v1/users/{userId}` - Returns `404` if user not found
+- [✅] `POST /v1/users` - Create user
+- [✅] `POST /v1/users` - Returns `400` for missing required fields
+- [✅] `GET /v1/users/{userId}` - Get **own** user details
+- [✅] `GET /v1/users/{userId}` - Returns `403` for other users’ data
+- [✅] `GET /v1/users/{userId}` - Returns `404` if user not found
 
 ### Update & Delete
 
