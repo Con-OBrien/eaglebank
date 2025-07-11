@@ -86,8 +86,8 @@ This project implements a RESTful banking API with users, accounts, and transact
 
 ## 🔐 Authentication
 
-- [ ] `POST /v1/auth/login` - Authenticate and return JWT
-- [ ] All routes (except `POST /users` and `POST /auth/login`) require JWT
+- [✅] `POST /v1/auth/login` - Authenticate and return JWT
+- [✅] All routes (except `POST /users` and `POST /auth/login`) require JWT
 - [ ] OpenAPI includes Bearer token auth
 
 ---
