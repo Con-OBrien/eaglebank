@@ -1,4 +1,4 @@
-package repository;
+package com.eaglebank.bankapi.repository;
 
 public class AccountRepository {
 }

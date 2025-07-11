@@ -1,4 +1,4 @@
-package service;
+package com.eaglebank.bankapi.service;
 
 public class UserService {
 }

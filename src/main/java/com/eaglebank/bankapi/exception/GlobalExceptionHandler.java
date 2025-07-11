@@ -1,4 +1,4 @@
-package exception;
+package com.eaglebank.bankapi.exception;
 
 public class GlobalExceptionHandler {
 }
