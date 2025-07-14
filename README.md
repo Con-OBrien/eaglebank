@@ -74,13 +74,13 @@ This project implements a RESTful banking API with users, accounts, and transact
 
 ### Update & Delete
 
-- [ ] `PATCH /v1/users/{userId}` - Update **own** user
-- [ ] `PATCH /v1/users/{userId}` - Returns `403` for other users
-- [ ] `PATCH /v1/users/{userId}` - Returns `404` if user not found
-- [ ] `DELETE /v1/users/{userId}` - Delete user with **no accounts**
-- [ ] `DELETE /v1/users/{userId}` - Returns `409` if user has accounts
-- [ ] `DELETE /v1/users/{userId}` - Returns `403` for other users
-- [ ] `DELETE /v1/users/{userId}` - Returns `404` if user not found
+- [✅] `PATCH /v1/users/{userId}` - Update **own** user
+- [✅] `PATCH /v1/users/{userId}` - Returns `403` for other users
+- [✅] `PATCH /v1/users/{userId}` - Returns `404` if user not found
+- [✅] `DELETE /v1/users/{userId}` - Delete user with **no accounts**
+- [✅] `DELETE /v1/users/{userId}` - Returns `409` if user has accounts
+- [✅] `DELETE /v1/users/{userId}` - Returns `403` for other users
+- [✅] `DELETE /v1/users/{userId}` - Returns `404` if user not found
 
 ---
 

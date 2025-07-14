@@ -1,6 +1,7 @@
 package com.eaglebank.bankapi.controller;
 
 import com.eaglebank.bankapi.model.User;
+import com.eaglebank.bankapi.repository.AccountRepository;
 import com.eaglebank.bankapi.repository.UserRepository;
 import com.eaglebank.bankapi.security.CustomUserDetails;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,27 +18,24 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository repo;
+    private final UserRepository userRepo;
+    private final AccountRepository accountRepo;
     private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository repo, PasswordEncoder passwordEncoder) {
-        this.repo = repo;
+    public UserController(UserRepository userRepo, AccountRepository accountRepo, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.accountRepo = accountRepo;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @GetMapping
-    public List<User> all() {
-        return repo.findAll();
     }
 
     @PostMapping
     public User create(@RequestBody User user) {
-        return repo.save(user);
+        return userRepo.save(user);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable UUID id, Authentication authentication) {
-        Optional<User> userOpt = repo.findById(id);
+        Optional<User> userOpt = userRepo.findById(id);
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
@@ -47,7 +44,7 @@ public class UserController {
 
         // Now get the logged-in user by email from authentication
         String loggedInEmail = authentication.getName();
-        Optional<User> loggedInUserOpt = repo.findByEmail(loggedInEmail);
+        Optional<User> loggedInUserOpt = userRepo.findByEmail(loggedInEmail);
         if (loggedInUserOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
         }
@@ -65,18 +62,13 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User update(@PathVariable UUID id, @RequestBody User newUser) {
-        return repo.findById(id).map(user -> {
+        return userRepo.findById(id).map(user -> {
             user.setName(newUser.getName());
-            return repo.save(user);
+            return userRepo.save(user);
         }).orElseGet(() -> {
             newUser.setId(id);
-            return repo.save(newUser);
+            return userRepo.save(newUser);
         });
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
-        repo.deleteById(id);
     }
 
     @PostMapping("/v1/users")
@@ -95,7 +87,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("At least one role must be provided");
         }
 
-        if (repo.existsByEmail(user.getEmail())) {
+        if (userRepo.existsByEmail(user.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Email already exists");
         }
@@ -104,7 +96,7 @@ public class UserController {
         String rawPassword = user.getPassword();
         user.setPassword(passwordEncoder.encode(rawPassword));
 
-        User savedUser = repo.save(user);
+        User savedUser = userRepo.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
@@ -117,5 +109,72 @@ public class UserController {
         ));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> patchUser(@PathVariable UUID id,
+                                       @RequestBody Map<String, Object> updates,
+                                       Authentication authentication) {
+        Optional<User> authUserOpt = userRepo.findByEmail(authentication.getName());
+        if (authUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
+        }
 
+        User authUser = authUserOpt.get();
+
+        Optional<User> targetUserOpt = userRepo.findById(id);
+        if (targetUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        User targetUser = targetUserOpt.get();
+
+        if (!authUser.getId().equals(targetUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+
+        if (updates.containsKey("name")) {
+            targetUser.setName((String) updates.get("name"));
+        }
+        if (updates.containsKey("email")) {
+            targetUser.setEmail((String) updates.get("email"));
+        }
+
+        userRepo.save(targetUser);
+
+        var response = Map.of(
+                "id", targetUser.getId(),
+                "name", targetUser.getName(),
+                "email", targetUser.getEmail()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id, Authentication authentication) {
+        Optional<User> authUserOpt = userRepo.findByEmail(authentication.getName());
+        if (authUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
+        }
+
+        User authUser = authUserOpt.get();
+
+        Optional<User> targetUserOpt = userRepo.findById(id);
+        if (targetUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        User targetUser = targetUserOpt.get();
+
+        if (!authUser.getId().equals(targetUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+
+        boolean hasAccounts = accountRepo.existsByUserId(id);
+        if (hasAccounts) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User has existing accounts");
+        }
+
+        userRepo.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
