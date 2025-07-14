@@ -262,4 +262,44 @@ public class AccountController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> patchAccount(@PathVariable UUID id,
+                                          @RequestBody Map<String, Object> updates,
+                                          Authentication authentication) {
+
+        Optional<User> authUserOpt = userRepo.findByEmail(authentication.getName());
+        if (authUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
+        }
+
+        User authUser = authUserOpt.get();
+
+        Optional<Account> accountOpt = accountRepo.findById(id);
+        if (accountOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+
+        Account account = accountOpt.get();
+
+        if (!account.getUser().getId().equals(authUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+
+        if (updates.containsKey("accountNumber")) {
+            account.setAccountNumber((String) updates.get("accountNumber"));
+        }
+
+        accountRepo.save(account);
+
+        var response = Map.of(
+                "id", account.getId(),
+                "accountNumber", account.getAccountNumber(),
+                "balance", account.getBalance(),
+                "createdAt", account.getCreatedAt()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }

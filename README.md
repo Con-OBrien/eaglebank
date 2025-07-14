@@ -105,9 +105,9 @@ This project implements a RESTful banking API with users, accounts, and transact
 - [✅] `GET /v1/accounts/{accountId}` - Get **own** account
 - [✅] `GET /v1/accounts/{accountId}` - Returns `403` for other accounts
 - [✅] `GET /v1/accounts/{accountId}` - Returns `404` if not found
-- [ ] `PATCH /v1/accounts/{accountId}` - Update **own** account
-- [ ] `PATCH /v1/accounts/{accountId}` - Returns `403` for other accounts
-- [ ] `PATCH /v1/accounts/{accountId}` - Returns `404` if not found
+- [✅] `PATCH /v1/accounts/{accountId}` - Update **own** account
+- [✅] `PATCH /v1/accounts/{accountId}` - Returns `403` for other accounts
+- [✅] `PATCH /v1/accounts/{accountId}` - Returns `404` if not found
 - [ ] `DELETE /v1/accounts/{accountId}` - Delete **own** account
 - [ ] `DELETE /v1/accounts/{accountId}` - Returns `403` for other accounts
 - [ ] `DELETE /v1/accounts/{accountId}` - Returns `404` if not found

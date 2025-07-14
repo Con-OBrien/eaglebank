@@ -42,7 +42,6 @@ public class UserController {
 
         User user = userOpt.get();
 
-        // Now get the logged-in user by email from authentication
         String loggedInEmail = authentication.getName();
         Optional<User> loggedInUserOpt = userRepo.findByEmail(loggedInEmail);
         if (loggedInUserOpt.isEmpty()) {
@@ -50,7 +49,6 @@ public class UserController {
         }
         User loggedInUser = loggedInUserOpt.get();
 
-        // Check if the logged-in user is allowed to access the requested user's info
         if (!loggedInUser.getId().equals(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
