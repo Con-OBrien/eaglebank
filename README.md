@@ -118,12 +118,12 @@ This project implements a RESTful banking API with users, accounts, and transact
 
 ### Create
 
-- [ ] `POST` - Deposit into **own** account
-- [ ] `POST` - Withdraw with **sufficient funds**
-- [ ] `POST` - Returns `422` for insufficient funds
-- [ ] `POST` - Returns `403` for other users' accounts
-- [ ] `POST` - Returns `404` if account not found
-- [ ] `POST` - Returns `400` for missing fields
+- [✅] `POST` - Deposit into **own** account
+- [✅] `POST` - Withdraw with **sufficient funds**
+- [✅] `POST` - Returns `422` for insufficient funds
+- [✅] `POST` - Returns `403` for other users' accounts
+- [✅] `POST` - Returns `404` if account not found
+- [✅] `POST` - Returns `400` for missing fields
 
 ### View
 

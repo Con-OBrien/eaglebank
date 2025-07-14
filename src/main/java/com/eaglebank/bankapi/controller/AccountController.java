@@ -1,15 +1,19 @@
 package com.eaglebank.bankapi.controller;
 
 import com.eaglebank.bankapi.dto.AccountResponse;
+import com.eaglebank.bankapi.dto.TransactionRequest;
 import com.eaglebank.bankapi.model.Account;
+import com.eaglebank.bankapi.model.Transaction;
 import com.eaglebank.bankapi.model.User;
 import com.eaglebank.bankapi.repository.AccountRepository;
+import com.eaglebank.bankapi.repository.TransactionRepository;
 import com.eaglebank.bankapi.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -18,10 +22,12 @@ public class AccountController {
 
     private final AccountRepository accountRepo;
     private final UserRepository userRepo;
+    private final TransactionRepository transactionRepo;
 
-    public AccountController(AccountRepository accountRepo, UserRepository userRepo) {
+    public AccountController(AccountRepository accountRepo, UserRepository userRepo, TransactionRepository transactionRepo) {
         this.accountRepo = accountRepo;
         this.userRepo = userRepo;
+        this.transactionRepo = transactionRepo;
     }
 
     @PostMapping
@@ -122,4 +128,68 @@ public class AccountController {
         accountRepo.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/transactions")
+    public ResponseEntity<?> handleTransaction(@PathVariable UUID id,
+                                               @RequestBody TransactionRequest request,
+                                               Authentication authentication) {
+        // Validate type
+        if (request.getType() == null || (!request.getType().equalsIgnoreCase("DEPOSIT") && !request.getType().equalsIgnoreCase("WITHDRAW"))) {
+            return ResponseEntity.badRequest().body("Invalid transaction type. Must be 'DEPOSIT' or 'WITHDRAW'");
+        }
+
+        // Validate amount
+        if (request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            return ResponseEntity.badRequest().body("Amount must be a positive number");
+        }
+
+        // Authenticate user
+        Optional<User> userOpt = userRepo.findByEmail(authentication.getName());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
+        }
+
+        // Find account
+        Optional<Account> accountOpt = accountRepo.findById(id);
+        if (accountOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+
+        Account account = accountOpt.get();
+
+        // Check ownership
+        if (!account.getUser().getId().equals(userOpt.get().getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+
+        if (request.getType().equalsIgnoreCase("WITHDRAW") && account.getBalance().compareTo(request.getAmount()) < 0) {
+            return ResponseEntity.unprocessableEntity().body("Insufficient funds");
+        }
+
+        BigDecimal newBalance = request.getType().equalsIgnoreCase("DEPOSIT")
+                ? account.getBalance().add(request.getAmount())
+                : account.getBalance().subtract(request.getAmount());
+
+        account.setBalance(newBalance);
+        accountRepo.save(account);
+
+        Transaction transaction = new Transaction();
+        transaction.setAccount(account);
+        transaction.setAmount(request.getAmount());
+        transaction.setTransactionType(request.getType().toUpperCase());
+        transaction.setDescription(request.getDescription());
+
+        transactionRepo.save(transaction);
+
+        var response = Map.of(
+                "transactionId", transaction.getId(),
+                "accountId", account.getId(),
+                "newBalance", account.getBalance(),
+                "transactionType", transaction.getTransactionType(),
+                "timestamp", transaction.getTransactionDate()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
 }
