@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/v1/auth/**").permitAll()   // Allow unauthenticated access to auth endpoints
                         .requestMatchers("/ping").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .anyRequest().authenticated()                  // All other endpoints require auth
                 )
                 .authenticationProvider(authenticationProvider())

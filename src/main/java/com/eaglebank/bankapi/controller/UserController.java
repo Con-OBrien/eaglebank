@@ -1,15 +1,23 @@
 package com.eaglebank.bankapi.controller;
 
+import com.eaglebank.bankapi.dto.requests.AddressRequest;
+import com.eaglebank.bankapi.dto.requests.CreateUserRequest;
+import com.eaglebank.bankapi.dto.responses.AddressResponse;
+import com.eaglebank.bankapi.dto.responses.UserResponse;
+import com.eaglebank.bankapi.model.Address;
 import com.eaglebank.bankapi.model.User;
 import com.eaglebank.bankapi.repository.AccountRepository;
 import com.eaglebank.bankapi.repository.UserRepository;
 import com.eaglebank.bankapi.security.CustomUserDetails;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +30,39 @@ public class UserController {
     private final AccountRepository accountRepo;
     private final PasswordEncoder passwordEncoder;
 
+    private Address convertToAddressEntity(AddressRequest requestAddress) {
+        Address address = new Address();
+        address.setLine1(requestAddress.getLine1());
+        address.setLine2(requestAddress.getLine2());
+        address.setLine3(requestAddress.getLine3());
+        address.setTown(requestAddress.getTown());
+        address.setCounty(requestAddress.getCounty());
+        address.setPostcode(requestAddress.getPostcode());
+        return address;
+    }
+
+    private UserResponse convertToUserResponse(User user) {
+        UserResponse response = new UserResponse();
+        response.setId(user.getId().toString());
+        response.setName(user.getName());
+        response.setEmail(user.getEmail());
+        response.setPhoneNumber(user.getPhoneNumber());
+
+        AddressResponse addressResponse = new AddressResponse();
+        addressResponse.setLine1(user.getAddress().getLine1());
+        addressResponse.setLine2(user.getAddress().getLine2());
+        addressResponse.setLine3(user.getAddress().getLine3());
+        addressResponse.setTown(user.getAddress().getTown());
+        addressResponse.setCounty(user.getAddress().getCounty());
+        addressResponse.setPostcode(user.getAddress().getPostcode());
+
+        response.setAddress(addressResponse);
+        response.setCreatedTimestamp(user.getCreatedAt().atOffset(ZoneOffset.UTC));
+        response.setUpdatedTimestamp(user.getUpdatedAt().atOffset(ZoneOffset.UTC));
+
+        return response;
+    }
+
     public UserController(UserRepository userRepo, AccountRepository accountRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.accountRepo = accountRepo;
@@ -29,9 +70,27 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody User user) {
-        return userRepo.save(user);
+    public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
+        User user = new User();
+
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setAddress(convertToAddressEntity(request.getAddress()));
+
+        user.setPassword(""); // for now blank or set with diff password logic
+
+        Instant now = Instant.now();
+        user.setCreatedAt(now);
+        user.setUpdatedAt(now);
+
+        User savedUser = userRepo.save(user);
+
+        UserResponse response = convertToUserResponse(savedUser);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable UUID id, Authentication authentication) {
