@@ -62,5 +62,16 @@ public class Account {
         this.balance = balance;
     }
 
-    // No setter for createdAt because it's set once on creation
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+// No setter for createdAt because it's set once on creation
 }

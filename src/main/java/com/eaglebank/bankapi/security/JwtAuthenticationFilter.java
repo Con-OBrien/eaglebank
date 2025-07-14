@@ -33,18 +33,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
-            String email = jwtTokenProvider.extractUsername(jwt);
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                var userDetails = customUserDetailsService.loadUserByUsername(email);
+            try {
+                String email = jwtTokenProvider.extractUsername(jwt);
 
-                if (jwtTokenProvider.validateToken(jwt, userDetails)) {
-                    var authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    var userDetails = customUserDetailsService.loadUserByUsername(email);
 
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    if (jwtTokenProvider.validateToken(jwt, userDetails)) {
+                        var authToken = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
                 }
+            } catch (io.jsonwebtoken.JwtException e) {
+                // Catch any JWT-related errors: invalid signature, malformed, expired, etc.
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Invalid or expired token\"}");
+                return;
             }
         }
 
