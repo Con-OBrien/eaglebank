@@ -192,4 +192,74 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping("/{accountId}/transactions")
+    public ResponseEntity<?> getTransactionsForAccount(@PathVariable UUID accountId, Authentication authentication) {
+        Optional<User> userOpt = userRepo.findByEmail(authentication.getName());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
+        }
+
+        Optional<Account> accountOpt = accountRepo.findById(accountId);
+        if (accountOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+
+        Account account = accountOpt.get();
+        if (!account.getUser().getId().equals(userOpt.get().getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+
+        List<Transaction> transactions = transactionRepo.findByAccountId(accountId);
+
+        return ResponseEntity.ok(
+                transactions.stream().map(tx -> Map.of(
+                        "id", tx.getId(),
+                        "amount", tx.getAmount(),
+                        "type", tx.getTransactionType(),
+                        "description", tx.getDescription(),
+                        "transactionDate", tx.getTransactionDate()
+                )).toList()
+        );
+    }
+
+    @GetMapping("/{accountId}/transactions/{transactionId}")
+    public ResponseEntity<?> getTransactionById(@PathVariable UUID accountId,
+                                                @PathVariable UUID transactionId,
+                                                Authentication authentication) {
+        Optional<User> userOpt = userRepo.findByEmail(authentication.getName());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
+        }
+
+        Optional<Account> accountOpt = accountRepo.findById(accountId);
+        if (accountOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+
+        Account account = accountOpt.get();
+        if (!account.getUser().getId().equals(userOpt.get().getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+
+        Optional<Transaction> txOpt = transactionRepo.findById(transactionId);
+        if (txOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not found");
+        }
+
+        Transaction tx = txOpt.get();
+        if (!tx.getAccount().getId().equals(accountId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction does not belong to this account");
+        }
+
+        var response = Map.of(
+                "id", tx.getId(),
+                "amount", tx.getAmount(),
+                "type", tx.getTransactionType(),
+                "description", tx.getDescription(),
+                "transactionDate", tx.getTransactionDate()
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
 }

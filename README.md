@@ -127,13 +127,13 @@ This project implements a RESTful banking API with users, accounts, and transact
 
 ### View
 
-- [ ] `GET` - List transactions for **own** account
-- [ ] `GET` - Returns `403` for other users' accounts
-- [ ] `GET` - Returns `404` if account not found
-- [ ] `GET /{transactionId}` - Fetch single transaction (own account)
-- [ ] `GET /{transactionId}` - Returns `403` for other accounts
-- [ ] `GET /{transactionId}` - Returns `404` if transaction not found
-- [ ] `GET /{transactionId}` - Returns `404` if transaction-account mismatch
+- [✅] `GET` - List transactions for **own** account
+- [✅] `GET` - Returns `403` for other users' accounts
+- [✅] `GET` - Returns `404` if account not found
+- [✅] `GET /{transactionId}` - Fetch single transaction (own account)
+- [✅] `GET /{transactionId}` - Returns `403` for other accounts
+- [✅] `GET /{transactionId}` - Returns `404` if transaction not found
+- [✅] `GET /{transactionId}` - Returns `404` if transaction-account mismatch
 
 ---
 
