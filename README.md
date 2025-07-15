@@ -11,7 +11,6 @@ A simple RESTful banking system built with Java, Spring Boot, PostgreSQL, and Fl
 - PostgreSQL (via Docker)
 - Flyway (for database migration)
 - Maven
-- HATEOAS for API discoverability
 
 ---
 
@@ -57,7 +56,7 @@ This project implements a RESTful banking API with users, accounts, and transact
 - [✅] PostgreSQL (or other DB) is configured and running
 - [✅] Database schema includes `users`, `bank_accounts`, and `transactions`
 - [✅] OpenAPI spec file (`openapi.yaml` or `openapi.json`) included
-- [ ] Postman collection or cURL examples provided (optional)
+- [✅] Postman collection or cURL examples provided (optional)
 - [✅] Configuration via `.env` or application properties
 
 ---
@@ -143,8 +142,8 @@ This project implements a RESTful banking API with users, accounts, and transact
 - [✅] Request validation using annotations
 - [✅] Global error handler (`@ControllerAdvice`)
 - [ ] Swagger UI for testing API locally
-- [ ] Unit tests and/or integration tests
-- [ ] CI with GitHub Actions or test runner
+- [✅] Unit tests and/or integration tests
+- [✅] CI with GitHub Actions or test runner
 - [ ] Script or data seeder for dev/testing
 
 ---
