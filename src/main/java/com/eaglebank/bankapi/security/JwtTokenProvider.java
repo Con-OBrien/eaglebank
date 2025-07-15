@@ -15,14 +15,14 @@ import javax.crypto.SecretKey;
 public class JwtTokenProvider {
 
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long validityInMilliseconds = 3600000; // 1 hour
 
-    // Generate token
     public String generateToken(String username, Set<String> roles) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", new ArrayList<>(roles));
 
         Date now = new Date();
+        // 1 hour
+        long validityInMilliseconds = 3600000;
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
@@ -33,12 +33,10 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // Extract username/email from token
     public String extractUsername(String token) {
         return getClaims(token).getSubject();
     }
 
-    // Validate token
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
@@ -49,7 +47,6 @@ public class JwtTokenProvider {
         return expiration.before(new Date());
     }
 
-    // Helper to parse token
     private Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)

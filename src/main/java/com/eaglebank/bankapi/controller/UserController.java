@@ -116,7 +116,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
 
-        // Return the user if all checks pass
         return ResponseEntity.ok(user);
     }
 

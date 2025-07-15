@@ -4,6 +4,7 @@ import com.eaglebank.bankapi.dto.AccountResponse;
 import com.eaglebank.bankapi.dto.TransactionRequest;
 import com.eaglebank.bankapi.dto.requests.CreateBankAccountRequest;
 import com.eaglebank.bankapi.dto.responses.BankAccountResponse;
+import com.eaglebank.bankapi.dto.responses.TransactionResponse;
 import com.eaglebank.bankapi.model.Account;
 import com.eaglebank.bankapi.model.Transaction;
 import com.eaglebank.bankapi.model.User;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @RestController
@@ -46,12 +48,10 @@ public class AccountController {
             @Valid @RequestBody CreateBankAccountRequest request,
             Authentication authentication) {
 
-        // Authenticate
         String email = authentication.getName();
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user"));
 
-        // Construct entity
         Account account = new Account();
         account.setUser(user);
         account.setName(request.getName());
@@ -143,23 +143,19 @@ public class AccountController {
     public ResponseEntity<?> handleTransaction(@PathVariable UUID id,
                                                @RequestBody TransactionRequest request,
                                                Authentication authentication) {
-        // Validate type
         if (request.getType() == null || (!request.getType().equalsIgnoreCase("DEPOSIT") && !request.getType().equalsIgnoreCase("WITHDRAW"))) {
             return ResponseEntity.badRequest().body("Invalid transaction type. Must be 'DEPOSIT' or 'WITHDRAW'");
         }
 
-        // Validate amount
         if (request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             return ResponseEntity.badRequest().body("Amount must be a positive number");
         }
 
-        // Authenticate user
         Optional<User> userOpt = userRepo.findByEmail(authentication.getName());
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
         }
 
-        // Find account
         Optional<Account> accountOpt = accountRepo.findById(id);
         if (accountOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
@@ -167,7 +163,6 @@ public class AccountController {
 
         Account account = accountOpt.get();
 
-        // Check ownership
         if (!account.getUser().getId().equals(userOpt.get().getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
@@ -261,16 +256,18 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction does not belong to this account");
         }
 
-        var response = Map.of(
-                "id", tx.getId(),
-                "amount", tx.getAmount(),
-                "type", tx.getTransactionType(),
-                "description", tx.getDescription(),
-                "transactionDate", tx.getTransactionDate()
-        );
+        // Map to TransactionResponse
+        TransactionResponse response = new TransactionResponse();
+        response.setId("tan-" + tx.getId().toString().replace("-", ""));
+        response.setAmount(tx.getAmount().doubleValue());
+        response.setType(tx.getTransactionType());
+        response.setReference(tx.getDescription());
+        response.setUserId("usr-" + tx.getAccount().getUser().getId().toString().replace("-", ""));
+        response.setCreatedTimestamp(tx.getTransactionDate().atOffset(ZoneOffset.UTC)); // if LocalDateTime
 
         return ResponseEntity.ok(response);
     }
+
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchAccount(@PathVariable UUID id,
@@ -359,6 +356,4 @@ public class AccountController {
         accountRepo.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }

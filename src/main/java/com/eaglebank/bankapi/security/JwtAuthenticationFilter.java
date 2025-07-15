@@ -49,7 +49,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     }
                 }
             } catch (io.jsonwebtoken.JwtException e) {
-                // Catch any JWT-related errors: invalid signature, malformed, expired, etc.
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"error\": \"Invalid or expired token\"}");

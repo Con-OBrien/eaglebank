@@ -29,7 +29,6 @@ public class TransactionController {
 
     @PostMapping
     public Transaction create(@RequestBody Transaction tx) {
-        // Ensure account exists before associating
         UUID accountId = tx.getAccount().getId();
         Optional<Account> account = accountRepo.findById(accountId);
         account.ifPresent(tx::setAccount);
