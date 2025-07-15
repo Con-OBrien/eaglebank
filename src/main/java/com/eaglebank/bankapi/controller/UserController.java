@@ -2,6 +2,7 @@ package com.eaglebank.bankapi.controller;
 
 import com.eaglebank.bankapi.dto.requests.AddressRequest;
 import com.eaglebank.bankapi.dto.requests.CreateUserRequest;
+import com.eaglebank.bankapi.dto.requests.UpdateUserRequest;
 import com.eaglebank.bankapi.dto.responses.AddressResponse;
 import com.eaglebank.bankapi.dto.responses.UserResponse;
 import com.eaglebank.bankapi.model.Address;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,7 +80,9 @@ public class UserController {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setAddress(convertToAddressEntity(request.getAddress()));
 
-        user.setPassword(""); // for now blank or set with diff password logic
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String testPassword = "testPassword"; // This should be replaced with a proper password handling logic
+        user.setPassword(encoder.encode(testPassword));
 
         Instant now = Instant.now();
         user.setCreatedAt(now);
@@ -118,15 +122,26 @@ public class UserController {
 
 
     @PutMapping("/{id}")
-    public User update(@PathVariable UUID id, @RequestBody User newUser) {
-        return userRepo.findById(id).map(user -> {
-            user.setName(newUser.getName());
-            return userRepo.save(user);
-        }).orElseGet(() -> {
-            newUser.setId(id);
-            return userRepo.save(newUser);
-        });
+    public ResponseEntity<?> updateUser(@PathVariable("id") UUID id,
+                                        @Valid @RequestBody UpdateUserRequest request) {
+
+        Optional<User> userOpt = userRepo.findById(id);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "User not found"));
+        }
+
+        User user = userOpt.get();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
+        user.setUpdatedAt(Instant.now());
+
+        User saved = userRepo.save(user);
+
+        return ResponseEntity.ok(convertToUserResponse(saved));
     }
+
 
     @PostMapping("/v1/users")
     public ResponseEntity<?> createUser(@RequestBody User user) {

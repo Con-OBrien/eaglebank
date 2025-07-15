@@ -88,7 +88,7 @@ This project implements a RESTful banking API with users, accounts, and transact
 
 - [✅] `POST /v1/auth/login` - Authenticate and return JWT
 - [✅] All routes (except `POST /users` and `POST /auth/login`) require JWT
-- [ ] OpenAPI includes Bearer token auth
+- [✅] OpenAPI includes Bearer token auth
 
 ---
 
@@ -108,9 +108,9 @@ This project implements a RESTful banking API with users, accounts, and transact
 - [✅] `PATCH /v1/accounts/{accountId}` - Update **own** account
 - [✅] `PATCH /v1/accounts/{accountId}` - Returns `403` for other accounts
 - [✅] `PATCH /v1/accounts/{accountId}` - Returns `404` if not found
-- [ ] `DELETE /v1/accounts/{accountId}` - Delete **own** account
-- [ ] `DELETE /v1/accounts/{accountId}` - Returns `403` for other accounts
-- [ ] `DELETE /v1/accounts/{accountId}` - Returns `404` if not found
+- [✅] `DELETE /v1/accounts/{accountId}` - Delete **own** account
+- [✅] `DELETE /v1/accounts/{accountId}` - Returns `403` for other accounts
+- [✅] `DELETE /v1/accounts/{accountId}` - Returns `404` if not found
 
 ---
 
@@ -140,8 +140,8 @@ This project implements a RESTful banking API with users, accounts, and transact
 ## 🚀 Optional / Enhancements
 
 - [ ] Pagination and sorting for `GET` requests
-- [ ] Request validation using annotations
-- [ ] Global error handler (`@ControllerAdvice`)
+- [✅] Request validation using annotations
+- [✅] Global error handler (`@ControllerAdvice`)
 - [ ] Swagger UI for testing API locally
 - [ ] Unit tests and/or integration tests
 - [ ] CI with GitHub Actions or test runner

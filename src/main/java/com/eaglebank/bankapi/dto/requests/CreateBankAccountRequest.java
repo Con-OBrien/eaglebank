@@ -2,19 +2,33 @@ package com.eaglebank.bankapi.dto.requests;
 
 
 import jakarta.validation.constraints.*;
-import lombok.Data;
 
-@Data
 public class CreateBankAccountRequest {
 
-    @NotBlank
+    public enum AccountType {
+        PERSONAL;
+    }
+
+    @NotBlank(message = "Name is required")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Account type is required")
     private AccountType accountType;
 
-    public enum AccountType {
-        personal
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 }
 

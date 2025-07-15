@@ -1,16 +1,16 @@
 package com.eaglebank.bankapi.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public class AccountResponse {
     private UUID id;
     private String accountNumber;
     private BigDecimal balance;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
-    public AccountResponse(UUID id, String accountNumber, BigDecimal balance, LocalDateTime createdAt) {
+    public AccountResponse(UUID id, String accountNumber, BigDecimal balance, Instant createdAt) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
@@ -30,7 +30,7 @@ public class AccountResponse {
         return balance;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 }

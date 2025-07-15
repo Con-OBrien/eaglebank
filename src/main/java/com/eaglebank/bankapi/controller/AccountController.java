@@ -2,18 +2,23 @@ package com.eaglebank.bankapi.controller;
 
 import com.eaglebank.bankapi.dto.AccountResponse;
 import com.eaglebank.bankapi.dto.TransactionRequest;
+import com.eaglebank.bankapi.dto.requests.CreateBankAccountRequest;
+import com.eaglebank.bankapi.dto.responses.BankAccountResponse;
 import com.eaglebank.bankapi.model.Account;
 import com.eaglebank.bankapi.model.Transaction;
 import com.eaglebank.bankapi.model.User;
 import com.eaglebank.bankapi.repository.AccountRepository;
 import com.eaglebank.bankapi.repository.TransactionRepository;
 import com.eaglebank.bankapi.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 
 @RestController
@@ -30,39 +35,56 @@ public class AccountController {
         this.transactionRepo = transactionRepo;
     }
 
+    private String generateAccountNumber() {
+        Random random = new Random();
+        int randomNumber = 100000 + random.nextInt(900000); // 6-digit number
+        return "01" + randomNumber;
+    }
+
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Account account, Authentication authentication) {
-        List<String> missingFields = new ArrayList<>();
+    public ResponseEntity<BankAccountResponse> create(
+            @Valid @RequestBody CreateBankAccountRequest request,
+            Authentication authentication) {
 
-        if (account.getAccountNumber() == null || account.getAccountNumber().isBlank()) {
-            missingFields.add("accountNumber");
-        }
-
-        if (account.getBalance() == null) {
-            missingFields.add("balance");
-        }
-
-        if (!missingFields.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body("Missing required field(s): " + String.join(", ", missingFields));
-        }
-
+        // Authenticate
         String email = authentication.getName();
-        Optional<User> userOpt = userRepo.findByEmail(email);
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid user"));
 
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user token");
-        }
+        // Construct entity
+        Account account = new Account();
+        account.setUser(user);
+        account.setName(request.getName());
+        account.setAccountType(request.getAccountType());
 
-        User authenticatedUser = userOpt.get();
+        account.setAccountNumber(generateAccountNumber());
+        account.setSortCode("10-10-10");
+        account.setCurrency("GBP");
+        account.setBalance(BigDecimal.ZERO);
 
-        if (!authenticatedUser.getId().equals(account.getUser().getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User mismatch");
-        }
+        Instant now = Instant.now();
+        account.setCreatedTimestamp(now);
+        account.setUpdatedTimestamp(now);
 
-        account.setUser(authenticatedUser);
         Account saved = accountRepo.save(account);
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", saved.getId(), "accountNumber", saved.getAccountNumber()));
+
+        BankAccountResponse response = getBankAccountResponse(saved);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    private static BankAccountResponse getBankAccountResponse(Account saved) {
+        BankAccountResponse response = new BankAccountResponse();
+        response.setAccountNumber(saved.getAccountNumber());
+        response.setSortCode(saved.getSortCode());
+        response.setName(saved.getName());
+        response.setAccountType(saved.getAccountType());
+        response.setBalance(saved.getBalance());
+        response.setCurrency(saved.getCurrency());
+        response.setCreatedTimestamp(saved.getCreatedTimestamp());
+        response.setUpdatedTimestamp(saved.getUpdatedTimestamp());
+        return response;
     }
 
 
@@ -80,7 +102,7 @@ public class AccountController {
                         a.getId(),
                         a.getAccountNumber(),
                         a.getBalance(),
-                        a.getCreatedAt()
+                        a.getCreatedTimestamp()
                 ))
                 .toList();
 
@@ -111,22 +133,10 @@ public class AccountController {
                 account.getId(),
                 account.getAccountNumber(),
                 account.getBalance(),
-                account.getCreatedAt()
+                account.getCreatedTimestamp()
         );
 
         return ResponseEntity.ok(response);
-    }
-
-
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        if (!accountRepo.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        accountRepo.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/transactions")
@@ -285,20 +295,69 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
 
-        if (updates.containsKey("accountNumber")) {
-            account.setAccountNumber((String) updates.get("accountNumber"));
+        if (updates.containsKey("name")) {
+            String name = updates.get("name").toString().trim();
+            if (!name.isEmpty()) {
+                account.setName(name);
+            }
         }
 
+        if (updates.containsKey("accountType")) {
+            try {
+                String typeStr = updates.get("accountType").toString().toUpperCase();
+                CreateBankAccountRequest.AccountType type = CreateBankAccountRequest.AccountType.valueOf(typeStr); // Validate enum
+                account.setAccountType(type);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body("Invalid accountType. Only 'PERSONAL' is supported.");
+            }
+        }
+
+        if (updates.containsKey("accountNumber")) {
+            String accountNumber = updates.get("accountNumber").toString().trim();
+            if (!accountNumber.matches("^01\\d{6}$")) {
+                return ResponseEntity.badRequest().body("Invalid accountNumber format. Expected format: ^01\\d{6}$");
+            }
+            account.setAccountNumber(accountNumber);
+        }
+
+        account.setUpdatedTimestamp(Instant.now());
         accountRepo.save(account);
 
-        var response = Map.of(
-                "id", account.getId(),
-                "accountNumber", account.getAccountNumber(),
-                "balance", account.getBalance(),
-                "createdAt", account.getCreatedAt()
-        );
+        BankAccountResponse response = new BankAccountResponse();
+        response.setAccountNumber(account.getAccountNumber());
+        response.setSortCode(account.getSortCode());
+        response.setName(account.getName());
+        response.setAccountType(account.getAccountType());
+        response.setBalance(account.getBalance());
+        response.setCurrency(account.getCurrency());
+        response.setCreatedTimestamp(account.getCreatedTimestamp());
+        response.setUpdatedTimestamp(account.getUpdatedTimestamp());
 
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAccount(@PathVariable UUID id, Authentication authentication) {
+        Optional<User> authUserOpt = userRepo.findByEmail(authentication.getName());
+        if (authUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid user");
+        }
+
+        User authUser = authUserOpt.get();
+
+        Optional<Account> accountOpt = accountRepo.findById(id);
+        if (accountOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
+        }
+
+        Account account = accountOpt.get();
+
+        if (!account.getUser().getId().equals(authUser.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+
+        accountRepo.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 

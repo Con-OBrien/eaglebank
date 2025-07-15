@@ -24,10 +24,12 @@ public class User implements UserDetails {
     @Id
     private UUID id = UUID.randomUUID();
 
+    @NotNull(message = "Name is required")
     @NotBlank(message = "Name is required")
     @Column(nullable = false)
     private String name;
 
+    @NotNull(message = "Email is required")
     @NotBlank(message = "Email is required")
     @Email
     @Column(nullable = false, unique = true)

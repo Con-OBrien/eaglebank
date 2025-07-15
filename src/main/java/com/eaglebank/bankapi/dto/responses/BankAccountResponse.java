@@ -1,52 +1,71 @@
 package com.eaglebank.bankapi.dto.responses;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.eaglebank.bankapi.dto.requests.CreateBankAccountRequest;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
-import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Schema(description = "Response containing bank account details")
 public class BankAccountResponse {
 
-    @JsonProperty("accountNumber")
-    @Pattern(regexp = "^01\\d{6}$")
-    @NotNull
+    @Schema(
+            description = "8-digit account number starting with 01",
+            example = "01234567",
+            pattern = "^01\\d{6}$"
+    )
     private String accountNumber;
 
-    @JsonProperty("sortCode")
-    @NotNull
+    @Schema(
+            description = "Standard sort code for the bank",
+            example = "10-10-10",
+            allowableValues = {"10-10-10"}
+    )
     private String sortCode;
 
-    @JsonProperty("name")
-    @NotBlank
+    @Schema(
+            description = "Friendly name for the bank account",
+            example = "My Personal Account"
+    )
     private String name;
 
-    @JsonProperty("accountType")
-    @NotNull
-    private String accountType; // Could use an enum if strict typing is needed
+    @Schema(
+            description = "Type of the bank account",
+            example = "personal",
+            allowableValues = {"personal"}
+    )
+    private CreateBankAccountRequest.AccountType accountType;
 
-    @JsonProperty("balance")
-    @DecimalMin("0.00")
-    @DecimalMax("10000.00")
-    @NotNull
+    @Schema(
+            description = "Current balance of the bank account (0.00 to 10000.00)",
+            example = "1000.00",
+            minimum = "0.00",
+            maximum = "10000.00"
+    )
     private BigDecimal balance;
 
-    @JsonProperty("currency")
-    @NotNull
+    @Schema(
+            description = "Currency of the account (GBP only supported)",
+            example = "GBP",
+            allowableValues = {"GBP"}
+    )
     private String currency;
 
-    @JsonProperty("createdTimestamp")
-    @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdTimestamp;
+    @Schema(
+            description = "Timestamp when the account was created",
+            example = "2025-07-14T10:15:30Z"
+    )
+    private Instant createdTimestamp;
 
-    @JsonProperty("updatedTimestamp")
-    @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime updatedTimestamp;
-
-    // Getters and Setters
+    @Schema(
+            description = "Timestamp when the account was last updated",
+            example = "2025-07-14T12:00:00Z"
+    )
+    private Instant updatedTimestamp;
 
     public String getAccountNumber() {
         return accountNumber;
@@ -72,11 +91,11 @@ public class BankAccountResponse {
         this.name = name;
     }
 
-    public String getAccountType() {
+    public CreateBankAccountRequest.AccountType getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType(CreateBankAccountRequest.AccountType accountType) {
         this.accountType = accountType;
     }
 
@@ -96,20 +115,19 @@ public class BankAccountResponse {
         this.currency = currency;
     }
 
-    public LocalDateTime getCreatedTimestamp() {
+    public Instant getCreatedTimestamp() {
         return createdTimestamp;
     }
 
-    public void setCreatedTimestamp(LocalDateTime createdTimestamp) {
+    public void setCreatedTimestamp(Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
-    public LocalDateTime getUpdatedTimestamp() {
+    public Instant getUpdatedTimestamp() {
         return updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(LocalDateTime updatedTimestamp) {
+    public void setUpdatedTimestamp(Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 }
-

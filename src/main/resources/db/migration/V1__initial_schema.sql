@@ -30,8 +30,13 @@ CREATE TABLE bank_accounts (
                                id UUID PRIMARY KEY,
                                user_id UUID NOT NULL,
                                account_number TEXT UNIQUE NOT NULL,
-                               balance NUMERIC(15, 2) DEFAULT 0,
+                               sort_code TEXT NOT NULL DEFAULT '10-10-10',
+                               name TEXT NOT NULL,
+                               account_type TEXT NOT NULL,
+                               balance NUMERIC(15, 2) NOT NULL DEFAULT 0,
+                               currency TEXT NOT NULL DEFAULT 'GBP',
                                created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                               updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                                CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
