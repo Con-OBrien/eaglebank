@@ -1,0 +1,1309 @@
+{
+	"info": {
+		"_postman_id": "880d62c8-585a-4583-b9e8-33dc32ea1a94",
+		"name": "eagle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30369401"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create user - Return 201",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alica Johnson\",\n  \"address\": {\n    \"line1\": \"123 High Street\",\n    \"line2\": \"Flat 4B\",\n    \"line3\": \"\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"W1A 1AA\"\n  },\n  \"phoneNumber\": \"+447911123456\",\n  \"email\": \"alica.johnson@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user - Return 400",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"address\": {\n    \"line1\": \"123 High Street\",\n    \"line2\": \"Flat 4B\",\n    \"line3\": \"\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"W1A 1AA\"\n  },\n  \"phoneNumber\": \"+447911123456\",\n  \"email\": \"alick.johnsor@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user's own details - Return 200",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1Mzc2MTgsImV4cCI6MTc1MjU0MTIxOH0.SNhHjzb3zqKMK3kAxBaD_nvVEOVVk85t1jiJHS0KNeE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alick Johnson\",\n  \"address\": {\n    \"line1\": \"123 High Street\",\n    \"line2\": \"Flat 4B\",\n    \"line3\": \"\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"W1A 1AA\"\n  },\n  \"phoneNumber\": \"+447911123456\",\n  \"email\": \"alick.johnson@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/8a3faac0-24df-4108-b3a1-80ee094fbd7f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"8a3faac0-24df-4108-b3a1-80ee094fbd7f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user's own details - Return 404",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1Nzg2MTIsImV4cCI6MTc1MjU4MjIxMn0.XfPTP822CsEMs9L1G4qs03aEClygTHEbW-YjkebhgL8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alick Johnson\",\n  \"address\": {\n    \"line1\": \"123 High Street\",\n    \"line2\": \"Flat 4B\",\n    \"line3\": \"\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"W1A 1AA\"\n  },\n  \"phoneNumber\": \"+447911123456\",\n  \"email\": \"alick.johnson@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/8a3faac0-24df-4108-b3a1-80ee094fbd7e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"8a3faac0-24df-4108-b3a1-80ee094fbd7e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user's own details - Return 403",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1Nzg0NDIsImV4cCI6MTc1MjU4MjA0Mn0.7ntAWTmjHBcuLSvrVC0chZoSXmrN2u3xtFAkPzxGo7s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alick Johnson\",\n  \"address\": {\n    \"line1\": \"123 High Street\",\n    \"line2\": \"Flat 4B\",\n    \"line3\": \"\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"W1A 1AA\"\n  },\n  \"phoneNumber\": \"+447911123456\",\n  \"email\": \"alick.johnson@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/97211e40-8a6c-4b30-9d00-f812ffec955c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"97211e40-8a6c-4b30-9d00-f812ffec955c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch user - Return 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1Mzc2MTgsImV4cCI6MTc1MjU0MTIxOH0.SNhHjzb3zqKMK3kAxBaD_nvVEOVVk85t1jiJHS0KNeE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alick Johnsoe\",\n  \"address\": {\n    \"line1\": \"123 High Street\",\n    \"line2\": \"Flat 4B\",\n    \"line3\": \"\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"W1A 1AA\"\n  },\n  \"phoneNumber\": \"+447911123456\",\n  \"email\": \"alick.johnson@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/8a3faac0-24df-4108-b3a1-80ee094fbd7f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"8a3faac0-24df-4108-b3a1-80ee094fbd7f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch user - Return 403",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljYS5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1Nzg4NjAsImV4cCI6MTc1MjU4MjQ2MH0.b7z-LI4P5UT1uNlc2G9m8ReJjHg1J_-bQ2BhKf2WwVs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alicd Johnsoe\",\n  \"address\": {\n    \"line1\": \"123 High Street\",\n    \"line2\": \"Flat 4B\",\n    \"line3\": \"\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"W1A 1AA\"\n  },\n  \"phoneNumber\": \"+447911123456\",\n  \"email\": \"alicd.johnson@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/afd92b60-6f0e-44b6-8f36-bb65e81a4694",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"afd92b60-6f0e-44b6-8f36-bb65e81a4694"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch user - Return 404",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljYS5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1Nzk0MjIsImV4cCI6MTc1MjU4MzAyMn0.7qysnwz1Jcu-VQ26u6j5ggCVgSTR-2udIHVbyjTttGU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alick Johnsoe\",\n  \"address\": {\n    \"line1\": \"123 High Street\",\n    \"line2\": \"Flat 4B\",\n    \"line3\": \"\",\n    \"town\": \"London\",\n    \"county\": \"Greater London\",\n    \"postcode\": \"W1A 1AA\"\n  },\n  \"phoneNumber\": \"+447911123456\",\n  \"email\": \"alick.johnson@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/8a3faac0-24df-4108-b3a1-80ee094fbd70",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"8a3faac0-24df-4108-b3a1-80ee094fbd70"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User - Return 204",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljYS5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1Nzk5NTAsImV4cCI6MTc1MjU4MzU1MH0.1FwyUJstzf7AXwjsB0vuwMbyZSB5Itj2N7E3MVW1J8Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/779ddfdf-1755-4df9-be2b-c8413e291c2c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"779ddfdf-1755-4df9-be2b-c8413e291c2c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User - Return 409",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODAwNDEsImV4cCI6MTc1MjU4MzY0MX0.lmMBnO7dnx2T8WDp8HOLfxR4oLauqrhI5Dj9IwMVUjs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/afd92b60-6f0e-44b6-8f36-bb65e81a4694",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"afd92b60-6f0e-44b6-8f36-bb65e81a4694"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User - Return 403",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODAwNDEsImV4cCI6MTc1MjU4MzY0MX0.lmMBnO7dnx2T8WDp8HOLfxR4oLauqrhI5Dj9IwMVUjs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/97211e40-8a6c-4b30-9d00-f812ffec955c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"97211e40-8a6c-4b30-9d00-f812ffec955c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User - Return 404",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODAwNDEsImV4cCI6MTc1MjU4MzY0MX0.lmMBnO7dnx2T8WDp8HOLfxR4oLauqrhI5Dj9IwMVUjs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/8a3faac0-24df-4108-b3a1-80ee094fbd70",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"8a3faac0-24df-4108-b3a1-80ee094fbd70"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get authenticated user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbXSwiaWF0IjoxNzUyMjQ2ODE1LCJleHAiOjE3NTIyNTA0MTV9.HAP7OkdPrteY4NMLYS0zePlSc7ARmhAl0qY5dqxRCNE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Get user's own accounts - Return 200",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get account by ID - Return 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODM1ODMsImV4cCI6MTc1MjU4NzE4M30.nVGHOrQu3WAYbMuOfza7TWK4tfW-5IQeJq-pQM5MiXY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get account by ID - Return 403",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODM3MzIsImV4cCI6MTc1MjU4NzMzMn0.6hALaCwN8RHZAtkIQ1cNHIhxiLAu5fWzeqPCrzktxNw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/6bb8d4d7-10d1-4a45-a468-8be5f8c62f94",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"6bb8d4d7-10d1-4a45-a468-8be5f8c62f94"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get account by ID - Return 404",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODM1ODMsImV4cCI6MTc1MjU4NzE4M30.nVGHOrQu3WAYbMuOfza7TWK4tfW-5IQeJq-pQM5MiXY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61053",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61053"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch  account - Return 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODQwMjEsImV4cCI6MTc1MjU4NzYyMX0.FabAmF6sjbgMo93blx4GzY_T0Ky6RI2p8ssdvg9JxiM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountType\": \"PERSONAL\",\n    \"name\": \"day to day likse\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/0120e06e-6b18-4d56-88c6-dae9d36da0e4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"0120e06e-6b18-4d56-88c6-dae9d36da0e4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch account - Return 403",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODQwMjEsImV4cCI6MTc1MjU4NzYyMX0.FabAmF6sjbgMo93blx4GzY_T0Ky6RI2p8ssdvg9JxiM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountType\": \"PERSONAL\",\n    \"name\": \"day to day like\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch account - Return 404",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODQwMjEsImV4cCI6MTc1MjU4NzYyMX0.FabAmF6sjbgMo93blx4GzY_T0Ky6RI2p8ssdvg9JxiM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountType\": \"PERSONAL\",\n    \"name\": \"day to day like\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/dae85dc2-2eff-4d92-89fd-c4c1e4c1243c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"dae85dc2-2eff-4d92-89fd-c4c1e4c1243c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account - Return 204",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODUxMjksImV4cCI6MTc1MjU4ODcyOX0.zVO1Ggelo6xWOqGe9j1kBnrKZVG0060_aj0nnUCpiZU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountType\": \"PERSONAL\",\n    \"name\": \"day to day like\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/0120e06e-6b18-4d56-88c6-dae9d36da0e4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"0120e06e-6b18-4d56-88c6-dae9d36da0e4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account - Return 403",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODUxMjksImV4cCI6MTc1MjU4ODcyOX0.zVO1Ggelo6xWOqGe9j1kBnrKZVG0060_aj0nnUCpiZU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountType\": \"PERSONAL\",\n    \"name\": \"day to day like\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account - Return 404",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODUxMjksImV4cCI6MTc1MjU4ODcyOX0.zVO1Ggelo6xWOqGe9j1kBnrKZVG0060_aj0nnUCpiZU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountType\": \"PERSONAL\",\n    \"name\": \"day to day like\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/dae85dc2-2eff-4d92-89fd-c4c1e4c1243b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"dae85dc2-2eff-4d92-89fd-c4c1e4c1243b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create account - Return 201",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODM1ODMsImV4cCI6MTc1MjU4NzE4M30.nVGHOrQu3WAYbMuOfza7TWK4tfW-5IQeJq-pQM5MiXY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountType\": \"PERSONAL\",\n    \"name\": \"day to day\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create account - Return 400",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1NzQ2ODIsImV4cCI6MTc1MjU3ODI4Mn0.ZtAn2oPVu5lEASgBmZvg6Gv2T-_rVF0--11JojsgJz8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountType\": \"PERSONAL\",\n    \"name\": \"day to day\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Create TX - DEPOSIT - 201",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODYwMjcsImV4cCI6MTc1MjU4OTYyN30.yjdamxIDXhURXIFaDG5GTaza-XtbEmQVYv0cKXEUFJ4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 40.00,\n  \"type\": \"DEPOSIT\",\n  \"description\": \"cheque\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TX - WITHDRAW - 201 (Sufficient funds)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODYwMjcsImV4cCI6MTc1MjU4OTYyN30.yjdamxIDXhURXIFaDG5GTaza-XtbEmQVYv0cKXEUFJ4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 4.00,\n  \"type\": \"WITHDRAW\",\n  \"description\": \"cheque\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TX - WITHDRAW - 422 (Insufficient funds)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODYwMjcsImV4cCI6MTc1MjU4OTYyN30.yjdamxIDXhURXIFaDG5GTaza-XtbEmQVYv0cKXEUFJ4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 4000.00,\n  \"type\": \"WITHDRAW\",\n  \"description\": \"cheque\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TX - Return 403",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODYwMjcsImV4cCI6MTc1MjU4OTYyN30.yjdamxIDXhURXIFaDG5GTaza-XtbEmQVYv0cKXEUFJ4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 40.00,\n  \"type\": \"DEPOSIT\",\n  \"description\": \"cheque\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/02c960ae-1f24-418b-8a29-4e449a39269c/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"02c960ae-1f24-418b-8a29-4e449a39269c",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TX - Return 404",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODYwMjcsImV4cCI6MTc1MjU4OTYyN30.yjdamxIDXhURXIFaDG5GTaza-XtbEmQVYv0cKXEUFJ4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 40.00,\n  \"type\": \"DEPOSIT\",\n  \"description\": \"cheque\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/accounts/02c960ae-1f24-418b-8a29-4e449a39269d/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"02c960ae-1f24-418b-8a29-4e449a39269d",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create TX - Return 400",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "GET TX's for own account - return 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODY4NzQsImV4cCI6MTc1MjU5MDQ3NH0.SxqrU_xB4X44Uk-eyc2PgB05oi23EyY321QZsF5HuRg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TX's for own account - return 403",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODY4OTksImV4cCI6MTc1MjU5MDQ5OX0.pBp1LK3mzfwfMmB0hB3-GMo8jJSGtFnRdmqa4Qefcjc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TX's for own account - return 404",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODY4OTksImV4cCI6MTc1MjU5MDQ5OX0.pBp1LK3mzfwfMmB0hB3-GMo8jJSGtFnRdmqa4Qefcjc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/dae85dc2-2eff-4d92-89fd-c4c1e4c1243c/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"dae85dc2-2eff-4d92-89fd-c4c1e4c1243c",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TX  by ID - return 200",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODcxMDIsImV4cCI6MTc1MjU5MDcwMn0.UJwNLd5dIFja5CJxyNakjPXSQD6DY0GkbZ8E225oYZM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054/transactions/ee2cc6c7-baa2-47a5-a233-72f131ace9e0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054",
+								"transactions",
+								"ee2cc6c7-baa2-47a5-a233-72f131ace9e0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TX  by ID - return 403",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29yQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODcxNDAsImV4cCI6MTc1MjU5MDc0MH0.MRS7bs3LicbC63IF7N4Ao4BzMT4MKqfC-5aMJqMQ7mo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054/transactions/ee2cc6c7-baa2-47a5-a233-72f131ace9e0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054",
+								"transactions",
+								"ee2cc6c7-baa2-47a5-a233-72f131ace9e0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TX  by ID - return 404",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljay5qb2huc29uQGV4YW1wbGUuY29tIiwicm9sZXMiOltdLCJpYXQiOjE3NTI1ODcxOTUsImV4cCI6MTc1MjU5MDc5NX0.5MhEeeu1p6qRSrf58UtzN2t6hhkRkWaniuQav6ejN6E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/accounts/240640ee-358c-42ec-ba4d-0c2a95d61054/transactions/ee2cc6c7-baa2-47a5-a233-72f131ace9e1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"240640ee-358c-42ec-ba4d-0c2a95d61054",
+								"transactions",
+								"ee2cc6c7-baa2-47a5-a233-72f131ace9e1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"alick.johnson@example.com\",\n  \"password\": \"testPassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
